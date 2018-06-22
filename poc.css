@@ -1,0 +1,74 @@
+@font-face {
+    font-family: 'MyFont-Regular';
+    src: url('/font/MyFont-Regular.ttf') format('truetype');
+}
+
+body {
+    background: #fff;
+    font-family: 'MyFont-Regular';
+    white-space: pre-wrap;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px
+}
+
+p::after {
+    color: blue;
+    content: "\00b6";
+}
+
+h2::after {
+    color: blue;
+    content: "\00b6";
+}
+
+
+ul, ul ul {
+    list-style-position: inside;
+    padding: 0
+}
+
+p, pre, ul {
+    margin: 0
+}
+
+.material, b, h2 {
+    font-weight: 700
+}
+
+html {
+    background: #f3f3f3
+}
+h2 {
+    font-size: 18px;
+    margin-bottom: 0;
+    font-weight:900;
+}
+
+b {
+    text-decoration: none
+}
+
+i {
+    font-style: italic
+}
+
+ul ul {
+    margin-left: 20px
+}
+
+.note {
+    color: #fff;
+    background: #ff4d4d
+}
+
+.code {
+    font-family: 'MyFont-Regular', Menlo, Monaco, Consolas, "Courier New", monospace;
+    word-break: break-all;
+    word-wrap: break-word;
+    color: #2196f3
+}
+
+.material {
+    display: inline
+}

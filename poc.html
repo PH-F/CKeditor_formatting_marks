@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>CKEditor</title>
+    <script src="https://cdn.ckeditor.com/4.5.6/full-all/ckeditor.js"></script>
+    <script
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+</head>
+<body>
+
+<textarea name="editor1" id="editor1">
+    <h2>Lorem ipsum dolor</h2><p> sit amet:Tab	consectetur&nbsp;&nbsp;&nbsp;adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br>
+Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.<br>
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.<br>
+    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+<p><br>----<br> </p>
+<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam,
+    eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo</p>
+</textarea>
+
+<script>
+    function getText() {
+        return CKEDITOR.instances.editor1.getData();
+    }
+
+    function setText(value) {
+        CKEDITOR.instances.editor1.setData(value);
+    }
+
+    function keyReleased(a) {
+        if (a == 13 || a == 2228237) {
+            setTimeout(function () {
+                //console.log(a);
+                let txt = getText();
+                console.log('sss' + txt);
+                setText(txt
+                    .replaceAll("<br", "&#8617;<br")
+                    .replaceAll("&#8617;&#8617;", "&#8617;")
+                    .replaceAll("↩&#8617;", "&#8617;")
+                );
+            }, 100);
+        }
+    }
+
+    function striptags(html) {
+        var tmp = document.createElement("DIV");
+        html = html.replaceAll('/n', "{br}").replaceAll("<br>", "{br}").replaceAll("<br />", "{br}").replaceAll("</div>", "{br}");
+        tmp.innerHTML = html;
+        html = tmp.textContent || tmp.innerText;
+        return html.replaceAll("{br}", "<br>");
+    }
+
+    String.prototype.replaceAll = function (search, replacement) {
+        var target = this;
+        return target.replace(new RegExp(search, 'g'), replacement);
+    };
+
+    var config = {
+        tabSpaces: 1,
+        height: 400,
+        width: 700,
+        startupFocus: true,
+        contentsCss: '/font/poc.css',
+        language: 'en',
+        toolbar: 'ep',
+        allowedContent: 'b;strong;font;i;u;ul;li;br;h2;p;sub;sup;span(note,material,material-number,code,highlight)[data-material-id,data-material-number]{background-color};table[width]{width};tbody;tr;td[colspan,rowspan];',
+        stylesSet: 'ep_styles',
+        removePlugins: 'elementspath',
+        resize_enabled: false,
+        forcePasteAsPlainText: true,
+        scayt_autoStartup: true,
+        scayt_disableOptionsStorage: ['all'],
+        baseFloatZIndex: 100000,
+        colorButton_colors: 'FFFF00,FF0000,008000',
+        colorButton_enableMore: false,
+        colorButton_backStyle: {
+            element: 'span',
+            attributes: {'class': 'highlight'},
+            styles: {'background-color': '#(color)'}
+        },
+        toolbar_ep: [
+            ['Source', 'Styles', 'Undo', 'Redo', 'Bold', 'Italic', 'underline', 'Subscript', 'Superscript', 'BGColor', 'BulletedList', 'Table', 'Find', 'Scayt'], ['Maximize']
+        ],
+        on: {
+            'instanceReady': function (event) {
+                setTimeout(function () {
+                    setText(getText().replaceAll("<br", "&#8617;<br").replaceAll('\t', "&#8594;"));
+                }, 1000);
+            },
+            //notify the FocusListener
+            'focus': function () {
+            },
+            'blur': function () {
+            },
+            //notify the ModifyListener
+            'change': function () {
+            },
+            'paste': function (evt) {
+                evt.stop();
+                var data = evt.data.dataValue;
+
+                if (window.chrome || window.safari) {
+                    // removing span wrapper on webkit browsers.
+                    // data = $(data).html();
+                }
+                data = striptags(data);
+                evt.editor.insertHtml(data.replaceAll("<br", "&#8617;<br"));
+
+            },
+            //ensure the key pressed event is fired if Enter is pressed
+            'key': function (evt) {
+                //console.log(evt.data.keyCode);
+                //shift-enter
+                if (evt.data.keyCode == 2228237) {
+                    evt.stop();
+                    var data = evt.data.dataValue;
+                    evt.editor.insertHtml("&#8617;");
+                }
+                //tab
+                if (evt.data.keyCode == 9) {
+                    // evt.stop();
+                    var data = evt.data.dataValue;
+                    evt.editor.insertHtml("&#8594;");
+                }
+            },
+        }
+    };
+
+    $('[name=editor1]').val($('[name=editor1]').val().replaceAll('\t', "&#8594;"));
+    CKEDITOR.replace('editor1', config);
+
+    CKEDITOR.stylesSet.add('ep_styles', [
+        {name: 'Text', element: 'p'},
+        {name: 'Heading', element: 'h2'},
+        {name: 'Code', element: 'span', type: CKEDITOR.STYLE_INLINE, attributes: {'class': 'code'}},
+        {name: 'Note', element: 'span', type: CKEDITOR.STYLE_INLINE, attributes: {'class': 'note'}},
+    ]);
+
+</script>
+
+</body>
+</html>
+
