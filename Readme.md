@@ -1,4 +1,4 @@
-#Show Formatting marks in CKeditor
+# Show Formatting marks in CKeditor
 
 **Word has a feature to Show or hide formatting marks**
 Formatting marks like dots (…) for spaces or arrows (→) for tab characters are used in Word to show the text layouts of documents. 
