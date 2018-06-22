@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'MyFont-Regular';
-    src: url('/font/MyFont-Regular.ttf') format('truetype');
+    src: url('MyFont-Regular.ttf') format('truetype');
 }
 
 body {
