@@ -31,12 +31,14 @@ Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu 
     }
 
     function keyReleased(a) {
-        if (a == 13 || a == 2228237) {
+        console.log(a);//&middot;
+        if (a == 13 || a == 2228237 || a == 2228256) {
             setTimeout(function () {
                 //console.log(a);
                 let txt = getText();
                 console.log('sss' + txt);
                 setText(txt
+                    .replaceAll("&nbsp;", "&middot;")
                     .replaceAll("<br", "&#8617;<br")
                     .replaceAll("&#8617;&#8617;", "&#8617;")
                     .replaceAll("↩&#8617;", "&#8617;")
@@ -82,12 +84,12 @@ Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu 
             styles: {'background-color': '#(color)'}
         },
         toolbar_ep: [
-            ['Source', 'Styles', 'Undo', 'Redo', 'Bold', 'Italic', 'underline', 'Subscript', 'Superscript', 'BGColor', 'BulletedList', 'Table', 'Find', 'Scayt'], ['Maximize']
+            ['Source', 'Styles', 'Undo', 'Redo', 'Bold', 'Italic', 'underline', 'Subscript', 'Superscript', 'BGColor', 'BulletedList', 'Table', 'SpecialChar', 'Find', 'Scayt'], ['Maximize']
         ],
         on: {
             'instanceReady': function (event) {
                 setTimeout(function () {
-                    setText(getText().replaceAll("<br", "&#8617;<br").replaceAll('\t', "&#8594;"));
+                    setText(getText().replaceAll("<br", "&#8617;<br").replaceAll('\t', "&#8594;").replaceAll('&nbsp;', "&middot;"));
                 }, 1000);
             },
             //notify the FocusListener
@@ -124,12 +126,20 @@ Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu 
                     // evt.stop();
                     var data = evt.data.dataValue;
                     evt.editor.insertHtml("&#8594;");
+                    evt.cancel();
+                }
+                //nbsp
+                if (evt.data.keyCode == 2228256) {
+                    // evt.stop();
+                    var data = evt.data.dataValue;
+                    evt.editor.insertHtml("&middot;");
+                    evt.cancel();
                 }
             },
         }
     };
 
-    $('[name=editor1]').val($('[name=editor1]').val().replaceAll('\t', "&#8594;"));
+    $('[name=editor1]').val($('[name=editor1]').val().replaceAll('\t', "&#8594;").replaceAll('&nbsp;', "&middot;"));
     CKEDITOR.replace('editor1', config);
 
     CKEDITOR.stylesSet.add('ep_styles', [
